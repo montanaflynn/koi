@@ -46,6 +46,9 @@ define('KOI_VERSION', '0.1');
 // this function in your own code.
 date_default_timezone_set('GMT');
 
+// Error reporting beeyatch
+error_reporting(E_ALL);
+
 require_once KOI_PATH . '/exceptions/autoloader.php';
 require_once KOI_PATH . '/exceptions/mapping.php'   ;
 require_once KOI_PATH . '/exceptions/router.php'    ;

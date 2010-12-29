@@ -208,7 +208,7 @@ class File implements CacheInterface
 		
 		if ( $content = unserialize($content) )
 		{
-			if ( ($time - $content['time']) <= $this->ttl )
+			if ( $this->ttl === 0 OR ($time - $content['time']) <= $this->ttl )
 			{
 				return TRUE;
 			}

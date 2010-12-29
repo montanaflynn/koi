@@ -172,7 +172,7 @@ class Cache
 		{
 			throw new Koi\Exception\CacheException("The specified driver (\"$driver\") does not exist");
 		}
-		
+
 		$this->cache_driver = new self::$drivers[$driver]($options);
 	}
 	

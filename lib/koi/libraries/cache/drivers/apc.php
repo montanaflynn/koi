@@ -2,7 +2,28 @@
 namespace Koi\Cache;
 
 /**
- * Cache driver description
+ * The APC cache stores all data in the APC cache. The advantage of APC
+ * is that it's fast, keeps track of the TTL itself and can be used by simply
+ * installing the PECL installation. For more information go to the
+ * "APC":http://nl2.php.net/apc page.
+ *
+ * Each key/value combination
+ * is stored as a new row in the APC store with a prefix of "koi_" to ensure
+ * that existing content isn't overwritten. This prefix can be customized by
+ * setting a custom prefix in the "prefix" configuration option.
+ *
+ * When working with APC you can use the following configuration options:
+ *
+ * * ttl: the time after an individual record should be removed
+ * * prefix: the prefix to use for each record
+ * 
+ * **IMPORTANT**: if you want to use APC from the CLI you have to set the following
+ * configuration item in your php.ini file:
+ *
+ * @apc.enable_cli = On@
+ *
+ * Another thing to remember is that APC won't clear the cache during the same request
+ * unless you call the apc_clear_cache('user') function or the destroy_all() method.
  *
  * @author     Yorick Peterse
  * @link       http://yorickpeterse.com/
@@ -41,11 +62,29 @@ class APC implements CacheInterface
 	public $ttl = 3600;
 	
 	/**
+	 * String containing the prefix for each record.
+	 *
+	 * @access public
+	 * @var    string
+	 */
+	public $prefix = 'koi_';
+	
+	/**
+	 * Static array that keeps track of all the keys that are used.
+	 *
+	 * @static
+	 * @access public
+	 * @var    array
+	 */
+	public static $used_keys = array();
+	
+	/**
 	 * The constructor is used to create a new instance of the cache class
 	 * and sets the options.
 	 * 
 	 * @author Yorick Peterse
 	 * @param  array $options Associative array of options for the cache driver.
+	 * @throws CacheException thrown whenever the APC extension isn't installed.
 	 * @return object
 	 */
 	public function __construct($options = array())
@@ -58,7 +97,16 @@ class APC implements CacheInterface
 			}
 		}
 		
+		// Check if all the required APC functions are installed
+		$apc_functions = array('apc_store', 'apc_fetch', 'apc_exists', 'apc_delete');
 		
+		foreach ( $apc_functions as $func )
+		{
+			if ( !function_exists($func) )
+			{
+				throw new \Koi\Exception\CacheException("The function $func does not exist, make sure APC is installed");
+			}
+		}
 	}
 	
 	/**
@@ -74,7 +122,20 @@ class APC implements CacheInterface
 	 */
 	public function write($key, $value)
 	{
+		$key = $this->prefix . $key;
 		
+		if ( !apc_store($key, $value, $this->ttl) )
+		{
+			throw new \Koi\Exception\CacheException("The key \"$key\" could not be written");
+		}
+		
+		// Let's keep track of the key
+		if ( !array_search($key, self::$used_keys) )
+		{
+			self::$used_keys[] = $key;
+		}
+		
+		return TRUE;
 	}
 	
 	/**
@@ -88,7 +149,14 @@ class APC implements CacheInterface
 	 */ 
 	public function read($key)
 	{
+		if ( $this->validate($key) === FALSE )
+		{
+			throw new \Koi\Exception\CacheException("The key \"$key\" is invalid");
+		}
 		
+		$key = $this->prefix . $key;
+		
+		return apc_fetch($key);
 	}
 	
 	/**
@@ -102,15 +170,26 @@ class APC implements CacheInterface
 	 */
 	public function validate($key)
 	{
+		$key = $this->prefix . $key;
 		
+		if ( !apc_exists($key) )
+		{
+			// Remove the corresponding key from the used_keys array			
+			if ( $search = array_search($key, self::$used_keys) )
+			{
+				unset(self::$used_keys[$search]);
+			}
+			
+			return FALSE;
+		}
+		
+		return TRUE;
 	}
 	
 	/**
 	 * The destroy method is used to remove a specific cache record from the storage
 	 * engine based on the key's name. This can be useful if you have a bunch of views
-	 * cached and you want to remove a particular one. If the row can't be removed
-	 * for some reason an exception should be thrown. If the key was removed successfully
-	 * TRUE should be returned.
+	 * cached and you want to remove a particular one.
 	 *
 	 * @author Yorick Peterse
 	 * @param  string $key The name of the key to delete.
@@ -119,21 +198,38 @@ class APC implements CacheInterface
 	 */
 	public function destroy($key)
 	{
+		$key = $this->prefix . $key;
 		
+		if ( apc_exists($key) AND !apc_delete($key) )
+		{
+			throw new \Koi\Exception\CacheException("The key \"$key\" could not be removed");
+		}
+		
+		if ( $search = array_search($key, self::$used_keys) )
+		{
+			unset(self::$used_keys[$search]);
+		}
+		
+		return TRUE;
 	}
 	
 	/**
-	 * The destroy_all method is used to clear the entire cache. Note that because
-	 * it may be difficult to find out what cache data belongs to your application
-	 * it's best to use a single cache record and store all cache items in that
-	 * record as sub-items.
+	 * The destroy_all method is used to clear the entire cache.
 	 *
 	 * @author Yorick Peterse
-	 * @return bool
 	 * @throws CacheException thrown whenever the cache couldn't be cleared.
+	 * @return bool
 	 */
 	public function destroy_all()
 	{
+		foreach ( self::$used_keys as $key )
+		{
+			if ( apc_exists($key) AND !apc_delete($key) )
+			{
+				throw new \Koi\Exception\CacheException("The key \"$key\" could not be removed");
+			}
+		}
 		
+		return TRUE;
 	}
 }

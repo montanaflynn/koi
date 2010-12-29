@@ -3,19 +3,22 @@ require_once __DIR__ . '/../../helper.php';
 
 use Waffles\Test as Test;
 
+// The following enables APC for the CLI
+ini_set('apc.enable_cli', 'On');
+
 Test::group("Test the APC cache", function()
 {
 	Test::add("Create a new instance of the APC cache", function($test)
 	{
 		$cache = new Koi\Cache\Cache('apc');
-		
+
 		$test->expects($cache)->to()->be_type_of('object');
 	});
 	
 	Test::add("Write some data to the cache", function($test)
 	{
 		$cache   = new Koi\Cache\Cache('apc');
-		$results = $cache->write('name', 'Yorick Peterse');
+		$results = $cache->write('name', 'Yorick Peterse');	
 		
 		$test->expects($results)->to()->be_type_of('boolean');
 		$test->expects($results)->to()->equal(TRUE);
@@ -32,10 +35,13 @@ Test::group("Test the APC cache", function()
 	
 	Test::add("Test the expiration of a cache record", function($test)
 	{
-		$cache   = new Koi\Cache\Cache('apc');
+		$cache   = new Koi\Cache\Cache('apc', array('ttl' => 2));
 		$wrote   = $cache->write('greeting', 'Hello, world!');
 		
+		// APC requires the manual cleaning of the cache as it won't
+		// expire data in the same request.
 		sleep(3);
+		apc_clear_cache('user');
 		
 		try
 		{
@@ -46,7 +52,7 @@ Test::group("Test the APC cache", function()
 		{
 			$read = FALSE;
 		}
-		
+
 		$test->expects($wrote)->to()->equal(TRUE);
 		$test->expects($read)->to()->equal(FALSE);
 	});
