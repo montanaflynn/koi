@@ -1,7 +1,7 @@
 <?php
 namespace Koi\View;
 
-require_once __DIR__ . '/../vendor/mustache/Mustache.php';
+require_once __DIR__ . '/../../../../vendor/mustache/Mustache.php';
 
 /**
  * View driver for the Mustache template system.

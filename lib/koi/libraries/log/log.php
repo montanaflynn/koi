@@ -107,6 +107,9 @@ class Log
 	
 	/**
 	 * Creates a new instance of the Logger class and loads the log driver.
+	 * When using a default driver you can set the first argument to be an array.
+	 * Doing this means you don't have to manually specify the driver over and over
+	 * again when using a default one.
 	 *
 	 * @author Yorick Peterse
 	 * @param  string $driver The name of the log driver to use.
@@ -116,6 +119,12 @@ class Log
 	 */ 
 	public function __construct($driver = 'file', $options = array())
 	{
+		if ( is_array($driver) )
+		{
+			$options = $driver;
+			$driver  = self::$default_driver;
+		}
+		
 		if ( !isset($driver) OR empty($driver) )
 		{
 			$driver = self::$default_driver;

@@ -115,6 +115,7 @@ class View
 	 * @param  array $variables Array containing variables that will be sent to the view.
 	 * @param  string $driver The name of the view driver. If no name is specified Koi\View::$default_driver
 	 * will be used.
+	 * @throws ViewException thrown whenever the specified driver doesn't exist.
 	 * @return object
 	 */
 	public function __construct($raw_view, $variables = array(), $driver = NULL)

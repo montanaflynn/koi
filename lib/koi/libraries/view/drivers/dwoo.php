@@ -1,7 +1,7 @@
 <?php
 namespace Koi\View;
 
-require_once __DIR__ . '/../vendor/dwoo/dwooAutoload.php';
+require_once __DIR__ . '/../../../../vendor/dwoo/dwooAutoload.php';
 
 /**
  * View driver for handling Dwoo templates.
