@@ -3,6 +3,8 @@ namespace Koi\Log;
 
 /**
  * The log interface defines what methods are required by each log class.
+ * When throwing exceptions you should use the LogException class defined under
+ * Koi\Exception\LogException.
  * 
  * @author  Yorick Peterse
  * @link    http://yorickpeterse.com/
@@ -47,10 +49,11 @@ interface LogInterface
 	 * The first argument is required and should be a string.
 	 *
 	 * This method should return TRUE upon successfully writing the data,
-	 * FALSE otherwise.
+	 * otherwise it should trigger an exception (LogException).
 	 *
 	 * @author Yorick Peterse
 	 * @param  string $data The data to log.
+	 * @throws LogException thrown whenever the data couldn't be written.
 	 * @return bool
 	 */
 	public function write($data);

@@ -187,20 +187,35 @@ class Cache
 	 */
 	public function write($key, $value)
 	{
-		
+		return $this->cache_driver->write($key, $value);
 	}
 	
 	/**
-	 * Retrieves the value for the specified key. If the key doesn't exist FALSE will
-	 * be returned instead.
+	 * Retrieves the value for the specified key. If the key exists the value
+	 * will be returned, otherwise an exception (CacheException) will be thrown.
 	 *
 	 * @author Yorick Peterse
 	 * @param  string $key The key to select
+	 * @throws CacheException whenever the cache key doesn't exist or couldn't be read.
 	 * @return mixed
 	 */
 	public function read($key)
 	{
-		
+		return $this->cache_driver->read($key);
+	}
+	
+	/**
+	 * The validate method is used to check if the specified cache item exists
+	 * and hasn't expired yet. If the cache item is valid TRUE will be returned, otherwise
+	 * FALSE.
+	 *
+	 * @author Yorick Peterse
+	 * @param  string $key The cache key to validate
+	 * @return bool
+	 */
+	public function validate($key)
+	{
+		return $this->cache_driver->validate($key);
 	}
 	
 	/**
@@ -208,21 +223,23 @@ class Cache
 	 *
 	 * @author Yorick Peterse
 	 * @param  string $key The key for which to destroy the data.
+	 * @throws CacheException thrown whenever the key couldn't be removed.
 	 * @return bool
 	 */
 	public function destroy($key)
 	{
-		
+		return $this->cache_driver->destroy($key);
 	}
 	
 	/**
 	 * Destroys all cache data.
 	 *
 	 * @author Yorick Peterse
+	 * @throws CacheException thrown whenever the cache couldn't be cleared.
 	 * @return bool
 	 */
 	public function destroy_all()
 	{
-	
+		return $this->cache_driver->destroy_all();
 	}
 }

@@ -1,16 +1,14 @@
 <?php
 
-namespace Koi\View;
+namespace Koi\Exception;
 
 /**
- * Interface that can be used to create view drivers.
+ * Exception class used by the cache system.
  *
- * @see        Koi\View\View
- * @author     Yorick Peterse
- * @link       http://yorickpeterse.com/
- * @licence    MIT License
- * @package    Koi
- * @subpackage View
+ * @author  Yorick Peterse
+ * @link    http://yorickpeterse.com/
+ * @licence MIT License
+ * @package Koi
  *
  * Copyright (c) 2010, Yorick Peterse
  * 
@@ -32,26 +30,4 @@ namespace Koi\View;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-interface ViewInterface
-{
-	/**
-	 * The __construct() method is used to store the raw view data in the object
-	 * and return a new instance of the class.
-	 * 
-	 * @author Yorick Peterse
-	 * @param  string $view_content The raw view data.
-	 * @param  array  $variables Associative array containing variables that will be sent
-	 * to the view.
-	 * @return void
-	 */
-	public function __construct($view_content, $variables = array());
-	
-	/**
-	 * The render() method is used to convert the raw view data into HTML. It should
-	 * return the processed view data back to the View class.
-	 *
-	 * @author Yorick Peterse
-	 * @return string The converted view data.
-	 */
-	public function render();
-}
+class CacheException extends \Exception {}

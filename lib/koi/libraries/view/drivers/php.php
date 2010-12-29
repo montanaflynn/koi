@@ -5,10 +5,11 @@ namespace Koi\View;
  * View driver for handling static HTML and dynamic PHP files. Note that if you want
  * to use PHP in your views you'll have to change the extension to .php.
  *
- * @author  Yorick Peterse
- * @link    http://yorickpeterse.com/
- * @licence MIT License
- * @package Koi
+ * @author     Yorick Peterse
+ * @link       http://yorickpeterse.com/
+ * @licence    MIT License
+ * @package    Koi
+ * @subpackage View
  *
  * Copyright (c) 2010, Yorick Peterse
  * 

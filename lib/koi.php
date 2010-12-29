@@ -47,20 +47,21 @@ define('KOI_VERSION', '0.1');
 date_default_timezone_set('GMT');
 
 require_once KOI_PATH . '/exceptions/autoloader.php';
-require_once KOI_PATH . '/exceptions/mapping.php';
-require_once KOI_PATH . '/exceptions/router.php';
+require_once KOI_PATH . '/exceptions/mapping.php'   ;
+require_once KOI_PATH . '/exceptions/router.php'    ;
 
 require_once KOI_PATH . '/core/autoloader.php';
-require_once KOI_PATH . '/core/functions.php';
+require_once KOI_PATH . '/core/functions.php' ;
 
 // The autoloader will load all our classes based on the path bound to that class.
 Koi\Autoloader::add('Koi\Application'   , KOI_PATH . '/core/application.php');
-Koi\Autoloader::add('Koi\Request'       , KOI_PATH . '/core/request.php');
-Koi\Autoloader::add('Koi\Router'        , KOI_PATH . '/core/router.php');
+Koi\Autoloader::add('Koi\Request'       , KOI_PATH . '/core/request.php')    ;
+Koi\Autoloader::add('Koi\Router'        , KOI_PATH . '/core/router.php')     ;
 
 // Load all library bootstrap files which in turn will lazy load the libraries themselves.
 require_once KOI_PATH . '/libraries/cookie/bootstrap.php';
-require_once KOI_PATH . '/libraries/log/bootstrap.php';
-require_once KOI_PATH . '/libraries/cli/bootstrap.php';
-require_once KOI_PATH . '/libraries/view/bootstrap.php';
-require_once KOI_PATH . '/libraries/log/bootstrap.php';
+require_once KOI_PATH . '/libraries/log/bootstrap.php'   ;
+require_once KOI_PATH . '/libraries/cli/bootstrap.php'   ;
+require_once KOI_PATH . '/libraries/view/bootstrap.php'  ;
+require_once KOI_PATH . '/libraries/log/bootstrap.php'   ;
+require_once KOI_PATH . '/libraries/cache/bootstrap.php' ;

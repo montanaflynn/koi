@@ -6,10 +6,11 @@ require_once __DIR__ . '/../../../../vendor/mustache/Mustache.php';
 /**
  * View driver for the Mustache template system.
  *
- * @author  Yorick Peterse
- * @link    http://yorickpeterse.com/
- * @licence MIT License
- * @package Koi
+ * @author     Yorick Peterse
+ * @link       http://yorickpeterse.com/
+ * @licence    MIT License
+ * @package    Koi
+ * @subpackage View
  *
  * Copyright (c) 2010, Yorick Peterse
  * 

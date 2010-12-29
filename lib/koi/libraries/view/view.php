@@ -47,10 +47,11 @@ namespace Koi\View;
  * * Dwoo
  * * Plain PHP/HTML
  *
- * @author  Yorick Peterse
- * @link    http://yorickpeterse.com/
- * @licence MIT License
- * @package Koi
+ * @author     Yorick Peterse
+ * @link       http://yorickpeterse.com/
+ * @licence    MIT License
+ * @package    Koi
+ * @subpackage View
  *
  * Copyright (c) 2010, Yorick Peterse
  * 

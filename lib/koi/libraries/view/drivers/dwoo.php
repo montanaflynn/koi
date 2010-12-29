@@ -6,10 +6,11 @@ require_once __DIR__ . '/../../../../vendor/dwoo/dwooAutoload.php';
 /**
  * View driver for handling Dwoo templates.
  *
- * @author  Yorick Peterse
- * @link    http://yorickpeterse.com/
- * @licence MIT License
- * @package Koi
+ * @author     Yorick Peterse
+ * @link       http://yorickpeterse.com/
+ * @licence    MIT License
+ * @package    Koi
+ * @subpackage View
  *
  * Copyright (c) 2010, Yorick Peterse
  * 
